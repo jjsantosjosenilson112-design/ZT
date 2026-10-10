@@ -1,0 +1,1081 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeta Hamburgueria - Mestre da Memorização Visual</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        zeta: {
+                            bg: '#0B0C10',
+                            card: '#151621',
+                            border: '#232536',
+                            gold: '#FFB703',
+                            amber: '#FB8500',
+                            red: '#E63946',
+                            purple: '#7209B7',
+                            teal: '#00F5D4',
+                            text: '#F8F9FA'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0C10;
+            color: #F8F9FA;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #0B0C10;
+            border-radius: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #232536;
+            border-radius: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #FFB703;
+        }
+
+        /* Card Flip Animations */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Animations */
+        .bounce-in {
+            animation: bounceIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.6) translateY(-15px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+            40%, 60% { transform: translate3d(6px, 0, 0); }
+        }
+
+        .glow-gold {
+            box-shadow: 0 0 15px rgba(255, 183, 3, 0.25);
+        }
+        .glow-purple {
+            box-shadow: 0 0 15px rgba(114, 9, 183, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-zeta-gold selection:text-black">
+
+    <header class="bg-zeta-card border-b border-zeta-border sticky top-0 z-50 shadow-2xl">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-zeta-amber to-zeta-gold text-black w-10 h-10 rounded-xl flex items-center justify-center font-orbitron font-black text-2xl shadow-lg shadow-zeta-gold/20">
+                    Z
+                </div>
+                <div>
+                    <h1 class="text-xl font-orbitron font-black tracking-wider text-white">ZETA <span class="text-zeta-gold">MEMO</span> <span class="text-xs bg-zeta-purple/30 text-zeta-teal px-2 py-0.5 rounded-full border border-zeta-purple/50">VISUAL 2.0</span></h1>
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Treinamento Mnemônico de Cardápio</p>
+                </div>
+            </div>
+
+            <!-- Navegação de Abas -->
+            <nav class="flex flex-wrap justify-center gap-1.5 bg-zeta-bg p-1.5 rounded-2xl border border-zeta-border w-full md:w-auto">
+                <button onclick="switchTab('rhymes')" id="tab-rhymes" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-zeta-gold text-black shadow">
+                    <i class="fa-solid fa-scroll"></i> Rimas & Macetes
+                </button>
+                <button onclick="switchTab('stack')" id="tab-stack" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-zeta-card">
+                    <i class="fa-solid fa-layer-group"></i> Montar
+                </button>
+                <button onclick="switchTab('memory')" id="tab-memory" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-zeta-card">
+                    <i class="fa-solid fa-brain"></i> Jogo Memória
+                </button>
+                <button onclick="switchTab('cards')" id="tab-cards" class="nav-btn px-3 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-zeta-card">
+                    <i class="fa-solid fa-id-card"></i> Fichas
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- ABA 1: RIMAS & HISTÓRIAS (MNEMÔNICA) -->
+        <section id="section-rhymes" class="space-y-6">
+            <div class="bg-zeta-card p-6 rounded-3xl border border-zeta-border shadow-2xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-zeta-border pb-4">
+                    <div>
+                        <h2 class="font-orbitron text-2xl font-black text-white flex items-center gap-2">
+                            <span>📜</span> Rimas, Histórias & Macetes Rápido
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">
+                            A mente humana memoriza muito mais fácil com histórias e rimas! Leia os versos e fixe os ingredientes de cada hambúrguer.
+                        </p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="filterRhymes('all')" id="rhyme-filter-all" class="rhyme-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-zeta-gold text-black">Todos (13)</button>
+                        <button onclick="filterRhymes('Zeta')" id="rhyme-filter-Zeta" class="rhyme-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-zeta-bg text-gray-400 border border-zeta-border">Linha Zeta</button>
+                        <button onclick="filterRhymes('XZTA')" id="rhyme-filter-XZTA" class="rhyme-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-zeta-bg text-gray-400 border border-zeta-border">Linha XZTA</button>
+                    </div>
+                </div>
+
+                <!-- Grid de Cards de Rima -->
+                <div id="rhymes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Gerado dinamicamente no JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 2: MONTAR GRAFICAMENTE (JOGO VISUAL) -->
+        <section id="section-stack" class="hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Painel de Montagem Visual -->
+                <div class="md:col-span-6 bg-zeta-card p-6 rounded-3xl border border-zeta-border shadow-2xl flex flex-col justify-between min-h-[480px]">
+                    <div>
+                        <div class="flex justify-between items-center mb-4 pb-3 border-b border-zeta-border">
+                            <div>
+                                <span class="text-[10px] text-zeta-teal font-bold uppercase tracking-wider block" id="stack-burger-line">Cardápio Zeta</span>
+                                <h3 class="font-orbitron font-black text-xl text-white" id="stack-burger-title">ALPHA</h3>
+                            </div>
+                            <!-- Seletor de Hambúrguer -->
+                            <select id="stack-burger-select" onchange="changeStackBurger(this.value)" class="bg-zeta-bg text-zeta-gold border border-zeta-border px-3 py-2 rounded-xl text-xs font-bold focus:outline-none focus:border-zeta-gold">
+                                <!-- Preenchido dinamicamente -->
+                            </select>
+                        </div>
+
+                        <!-- Macete Rápido visível na montagem -->
+                        <div class="bg-zeta-purple/20 border border-zeta-purple/40 p-2.5 rounded-2xl mb-4 flex items-center gap-2">
+                            <span class="text-lg">💡</span>
+                            <span id="stack-burger-hack" class="text-xs font-bold text-gray-200">Macete: ALPHA tem Barbacoa + Bacon + Calabresa</span>
+                        </div>
+
+                        <!-- Torre Visual do Lanche -->
+                        <div id="burger-visual-stack" class="flex flex-col-reverse items-center justify-start gap-1 py-4 my-auto min-h-[260px] bg-zeta-bg/60 rounded-2xl border border-zeta-border/50 p-4">
+                            <!-- Camadas inseridas via JS -->
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-zeta-border text-center">
+                        <div id="stack-feedback-text" class="text-xs font-bold min-h-[20px] mb-2"></div>
+                        <div class="flex gap-2">
+                            <button onclick="undoLastStackLayer()" class="flex-1 bg-zeta-bg hover:bg-zeta-border text-gray-300 font-bold py-2.5 rounded-xl text-xs transition-all border border-zeta-border">
+                                <i class="fa-solid fa-rotate-left"></i> Desfazer
+                            </button>
+                            <button onclick="resetStackGame()" class="flex-1 bg-zeta-red/20 text-zeta-red hover:bg-zeta-red hover:text-white font-bold py-2.5 rounded-xl text-xs transition-all border border-zeta-red/30">
+                                <i class="fa-solid fa-trash-can"></i> Reiniciar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel de Seleção de Ingredientes -->
+                <div class="md:col-span-6 bg-zeta-card p-6 rounded-3xl border border-zeta-border shadow-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-orbitron font-bold text-xs text-white uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-hand-pointer text-zeta-gold"></i> Escolha a Próxima Camada
+                            </h4>
+                            <span id="stack-next-layer-num" class="text-xs font-mono font-bold text-zeta-gold">Camada #1 (Base)</span>
+                        </div>
+                        <p class="text-[11px] text-gray-400 mb-4">Monte sempre na ordem exata, começando pelo Pão de Leite base até o topo!</p>
+
+                        <!-- Grid de Ingredientes Emojis -->
+                        <div id="stack-ingredient-picker" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-[380px] overflow-y-auto custom-scroll pr-1">
+                            <!-- Preenchido via JS -->
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-zeta-border text-center">
+                        <span class="text-[11px] text-gray-400 font-semibold">
+                            Progresso: <strong id="stack-progress-count" class="text-zeta-gold">0</strong> / <span id="stack-total-count">0</span> ingredientes
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 3: JOGO DA MEMÓRIA DOS ÍCONES -->
+        <section id="section-memory" class="hidden space-y-6">
+            <div class="bg-zeta-card p-6 rounded-3xl border border-zeta-border shadow-2xl">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 border-b border-zeta-border pb-4">
+                    <div>
+                        <h2 class="font-orbitron text-2xl font-black text-white flex items-center gap-2">
+                            <span>🧩</span> Jogo da Memória Mnemônico
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">
+                            Combine a carta com o **Nome do Hambúrguer / Macete** com a carta da **Sua Sequência de Emojis / Receita**.
+                        </p>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="text-right">
+                            <span class="text-[9px] uppercase text-gray-400 font-bold block">Pares Encontrados</span>
+                            <span id="memory-matches" class="font-orbitron font-black text-zeta-gold text-lg">0 / 6</span>
+                        </div>
+                        <button onclick="startMemoryGame()" class="bg-zeta-gold hover:bg-amber-400 text-black font-orbitron font-black px-4 py-2 rounded-xl text-xs transition-all shadow">
+                            <i class="fa-solid fa-arrows-rotate"></i> Novo Jogo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grid de Cartas do Jogo da Memória -->
+                <div id="memory-card-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 py-2">
+                    <!-- Cartas inseridas via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 4: FICHAS MNEMÔNICAS & FILTROS -->
+        <section id="section-cards" class="hidden space-y-6">
+            <div class="bg-zeta-card p-6 rounded-3xl border border-zeta-border shadow-2xl">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6 border-b border-zeta-border pb-4">
+                    <div>
+                        <h2 class="font-orbitron text-2xl font-black text-white flex items-center gap-2">
+                            <span>🧠</span> Fichas Mnemônicas de Estudo
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">Consulte os ingredientes, macetes e visualização rápida em formato de ficha técnica.</p>
+                    </div>
+
+                    <!-- Input de Busca -->
+                    <div class="relative w-full sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-gray-500 text-xs"></i>
+                        <input type="text" id="cards-search-input" onkeyup="filterStudyCards()" placeholder="Buscar hambúrguer ou ingrediente..." class="w-full bg-zeta-bg text-white pl-8 pr-3 py-2 rounded-xl text-xs border border-zeta-border focus:outline-none focus:border-zeta-gold">
+                    </div>
+                </div>
+
+                <!-- Grid de Fichas -->
+                <div id="study-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Gerado via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-zeta-card text-gray-500 text-center py-4 text-xs font-semibold border-t border-zeta-border mt-6">
+        Zeta Hamburgueria - Módulo Mnemônico Visual &copy; 2026
+    </footer>
+
+    <script>
+        // SINTETIZADOR DE SOM (Web Audio API)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'pop') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(350, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.08);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } else if (type === 'flip') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(250, now);
+                osc.frequency.exponentialRampToValueAtTime(450, now + 0.06);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(110, now + 0.22);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.22);
+                osc.start(now);
+                osc.stop(now + 0.22);
+            } else if (type === 'win') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.setValueAtTime(554.37, now + 0.1);
+                osc.frequency.setValueAtTime(659.25, now + 0.2);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.45);
+                osc.start(now);
+                osc.stop(now + 0.45);
+            }
+        }
+
+        // DATABASE COMPLETA DA ZETA HAMBURGUERIA COM EMOJIS, RIMAS E MACETES
+        const ZETA_MENU = [
+            {
+                id: 'alpha',
+                name: 'ALPHA',
+                category: 'Zeta',
+                hack: 'Macete: A de Barbecue + Bacon + Calabresa + Cebola Caramelizada',
+                rhyme: 'No ALPHA o tempero é nota mil! 🍖\nLeve calabresa, bacon e barbecue ao estilo do Brasil!\nSoma a cebola caramelizada bem fofinha,\nE tem o melhor lanche da nossa cozinha! 🔥',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Calabresa', icon: '🍕', color: '#D62828' },
+                    { name: 'Bacon', icon: '🥓', color: '#B23A48' },
+                    { name: 'Cebola caramelizada', icon: '🧅', color: '#9B51E0' },
+                    { name: 'Molho barbecue', icon: '🥫', color: '#8B0000' }
+                ]
+            },
+            {
+                id: 'zeta',
+                name: 'ZETA',
+                category: 'Zeta',
+                hack: 'Macete: O Zeta da Casa = Salada + Bacon + Cebola Caramelizada + Molho Americano',
+                rhyme: 'O ZETA é o campeão e dá aula! 🏆\nCom alface e tomate a salada se instala!\nTem bacon bem crocante e cebola no tacho,\nE molho americano para dar o abraço! 🥣',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Bacon', icon: '🥓', color: '#B23A48' },
+                    { name: 'Alface', icon: '🥬', color: '#2A9D8F' },
+                    { name: 'Tomate', icon: '🍅', color: '#E63946' },
+                    { name: 'Cebola caramelizada', icon: '🧅', color: '#9B51E0' },
+                    { name: 'Molho americano', icon: '🥣', color: '#F4A261' }
+                ]
+            },
+            {
+                id: 'delta',
+                name: 'DELTA',
+                category: 'Zeta',
+                hack: 'Macete: DELTA = Trio da Salada + Cebola ROXA (Sem bacon!)',
+                rhyme: 'O DELTA é leve e tem uma nota:\nSalada fresquinha e cebola ROXA! 🧅\nPão, queijo, carne e molho americano,\nÉ a escolha perfeita de todo ano! 🌿',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Alface', icon: '🥬', color: '#2A9D8F' },
+                    { name: 'Tomate', icon: '🍅', color: '#E63946' },
+                    { name: 'Cebola roxa', icon: '🧅', color: '#7209B7' },
+                    { name: 'Molho americano', icon: '🥣', color: '#F4A261' }
+                ]
+            },
+            {
+                id: 'sigma',
+                name: 'SIGMA',
+                category: 'Zeta',
+                hack: 'Macete: SIGMA = S de Só Queijo Duplo! (Direto ao ponto)',
+                rhyme: 'O SIGMA é direto e não tem enrolação! 🧀\nTem QUEIJO DUPLO de montão no pão!\nLeva blend suculento e molho americano,\nÉ o burger mais prático do nosso plano! ⚡',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Fatia de queijo duplo', icon: '🧀', color: '#FFB703' },
+                    { name: 'Molho americano', icon: '🥣', color: '#F4A261' }
+                ]
+            },
+            {
+                id: 'gama',
+                name: 'GAMA',
+                category: 'Zeta',
+                hack: 'Macete: GAMA = Básico com BACON + Molho BARBECUE',
+                rhyme: 'O GAMA é amor pra quem ama bacon crocante! 🥓\nEntra o barbecue doce e marcante!\nPão, carne e queijo derretido no grau,\nEsse lanche clássico é sensacional! 🍁',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Bacon', icon: '🥓', color: '#B23A48' },
+                    { name: 'Molho barbecue', icon: '🥫', color: '#8B0000' }
+                ]
+            },
+            {
+                id: 'omega',
+                name: 'ÔMEGA',
+                category: 'Zeta',
+                hack: 'Macete: ÔMEGA = O Completo da casa! Tem OVO + CEBOLA FRITA',
+                rhyme: 'O ÔMEGA é gigante e tem tudo na medida! 🍳\nLeva OVO frito e cebola bem frita!\nSalada completa para fechar com emoção,\nE o molho americano pra selar o pão! 🌟',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Ovo', icon: '🍳', color: '#FFD166' },
+                    { name: 'Cebola frita', icon: '🧅', color: '#D4A373' },
+                    { name: 'Alface', icon: '🥬', color: '#2A9D8F' },
+                    { name: 'Tomate', icon: '🍅', color: '#E63946' },
+                    { name: 'Molho americano', icon: '🥣', color: '#F4A261' }
+                ]
+            },
+            {
+                id: 'kappa',
+                name: 'KAPPA BURGUER',
+                category: 'Zeta',
+                hack: 'Macete: KAPPA = O Rei do Bacon! Molho de Bacon + Farofa de Bacon',
+                rhyme: 'O KAPPA traz bacon em dose duplicada! 🥓\nTem MOLHO DE BACON e FAROFA crocada!\nJunta a cebola caramelizada bem doce,\nComo se o céu dos hambúrgueres fosse! ✨',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Cebola caramelizada', icon: '🧅', color: '#9B51E0' },
+                    { name: 'Molho de bacon', icon: '🥫', color: '#C05A46' },
+                    { name: 'Farofa de bacon', icon: '🥓', color: '#8D0801' }
+                ]
+            },
+            {
+                id: 'x-salada',
+                name: 'X-SALADA',
+                category: 'XZTA',
+                hack: 'Macete: X-SALADA tradicional = Carne, Queijo, Ovo, Presunto e Salada',
+                rhyme: 'No X-SALADA a tradição vem primeiro! 🥗\nQueijo, OVO e PRESUNTO de parceiro!\nSalada verde bem fofinha no lugar,\nO clássico perfeito pra saborear! 😋',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Ovo', icon: '🍳', color: '#FFD166' },
+                    { name: 'Presunto', icon: '🍖', color: '#F28482' },
+                    { name: 'Salada', icon: '🥗', color: '#2A9D8F' }
+                ]
+            },
+            {
+                id: 'x-calabresa',
+                name: 'X-CALABRESA',
+                category: 'XZTA',
+                hack: 'Macete: X-Salada + Rodelas de CALABRESA',
+                rhyme: 'O X-CALABRESA é picante e fogoso! 🍕\nEntra a calabresa pra ficar bem saboroso!\nJunto com ovo, queijo e salada no pão,\nFaz a festa em toda refeição! 🎉',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Calabresa', icon: '🍕', color: '#D62828' },
+                    { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Ovo', icon: '🍳', color: '#FFD166' },
+                    { name: 'Salada', icon: '🥗', color: '#2A9D8F' }
+                ]
+            },
+            {
+                id: 'x-bacon',
+                name: 'X-BACON',
+                category: 'XZTA',
+                hack: 'Macete: X-Salada + Tiras de BACON crocante',
+                rhyme: 'O X-BACON traz o bacon pra brilhar! 🥓\nCom ovo e queijo no mesmo lugar!\nA salada dá o toque de leveza final,\nUm lanche tradicional e sensacional! 🍔',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Bacon', icon: '🥓', color: '#B23A48' },
+                    { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Ovo', icon: '🍳', color: '#FFD166' },
+                    { name: 'Salada', icon: '🥗', color: '#2A9D8F' }
+                ]
+            },
+            {
+                id: 'x-zta',
+                name: 'X-ZTA',
+                category: 'XZTA',
+                hack: 'Macete: O TUDÃO da linha X! Calabresa + Bacon + Presunto + Ovo + Salada',
+                rhyme: 'O X-ZTA é o monstro da chapa quente! 💥\nBacon, calabresa e presunto pra gente!\nTem ovo e salada pra completar o prato,\nO maior lanche do nosso contrato! 👑',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Calabresa', icon: '🍕', color: '#D62828' },
+                    { name: 'Bacon', icon: '🥓', color: '#B23A48' },
+                    { name: 'Presunto', icon: '🍖', color: '#F28482' },
+                    { name: 'Ovo', icon: '🍳', color: '#FFD166' },
+                    { name: 'Salada', icon: '🥗', color: '#2A9D8F' }
+                ]
+            },
+            {
+                id: 'x-banana',
+                name: 'X BANANA',
+                category: 'XZTA',
+                hack: 'Macete: O Agridoce da Casa! BANANA DA TERRA FRITA + Molho Americano',
+                rhyme: 'O X BANANA é agridoce e especial! 🍌\nBanana da terra frita que não tem igual!\nCom molho americano no blend quentinho,\nUm sabor único e bem docinho! ✨',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Banana da terra frita', icon: '🍌', color: '#FFB703' },
+                    { name: 'Molho americano', icon: '🥣', color: '#F4A261' }
+                ]
+            },
+            {
+                id: 'simples',
+                name: 'SIMPLES',
+                category: 'XZTA',
+                hack: 'Macete: SIMPLES = Batata Palha Crocante + Molho Americano',
+                rhyme: 'O SIMPLES é crocante e vai te encantar! 🍟\nTem BATATA PALHA pra gente saborear!\nQueijo derretido e molho americano na medida,\nA escolha mais rápida de toda a vida! ⚡',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Batata palha', icon: '🍟', color: '#E9C46A' },
+                    { name: 'Molho americano', icon: '🥣', color: '#F4A261' }
+                ]
+            },
+            // NOVOS HAMBÚRGUERES ADICIONADOS DO CARDÁPIO
+            {
+                id: 'x-burguer',
+                name: 'X BURGUER',
+                category: 'Novidades',
+                hack: 'Macete: Pão + Blend + Queijo + Molho Barbecue',
+                rhyme: 'O X BURGUER é prático e genial! 🍔\nPão de leite, blend e queijo tradicional!\nO molho barbecue entra pra complementar,\nO lanche perfeito pra quem quer economizar! ✨',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Molho barbecue', icon: '🥫', color: '#8B0000' }
+                ]
+            },
+            {
+                id: 'x-burguer-acebolado',
+                name: 'X BURGUER ACEBOLADO',
+                category: 'Novidades',
+                hack: 'Macete: X-Burguer + CEBOLA FRITA',
+                rhyme: 'O ACEBOLADO traz o toque do chefe! 🧅\nCebola frita douradinha que nunca falhe!\nCom barbecue, queijo e carne na medida,\nA cebola frita dá mais sabor à sua vida! 🔥',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Cebola frita', icon: '🧅', color: '#D4A373' },
+                    { name: 'Molho barbecue', icon: '🥫', color: '#8B0000' }
+                ]
+            },
+            {
+                id: 'x-egg',
+                name: 'X EGG',
+                category: 'Novidades',
+                hack: 'Macete: OVO + MAIONESE DE ALHO especial',
+                rhyme: 'O X EGG é suculento e de respeito! 🍳\nOvo frito no ponto com queijo derreto!\nA maionese de alho dá o toque especial,\nUm sabor cremoso e fora do normal! 🧄',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Ovo', icon: '🍳', color: '#FFD166' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Maionese de alho', icon: '🧄', color: '#FFF3BF' }
+                ]
+            },
+            {
+                id: 'x-burguer-duplo',
+                name: 'X BURGUER DUPLO',
+                category: 'Novidades',
+                hack: 'Macete: DUPLO BLEND (2x 100g de carne)',
+                rhyme: 'O DUPLO é pra quem tem fome de verdade! 🥩🥩\nDois blends de carne de alta qualidade!\nDuas vezes mais sabor com queijo e barbecue,\nO lanche mais reforçado do nosso menu! 🏆',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Molho barbecue', icon: '🥫', color: '#8B0000' }
+                ]
+            },
+            {
+                id: 'x-banana-bacon',
+                name: 'X BANANA BACON',
+                category: 'Novidades',
+                hack: 'Macete: Banana Frita + 2 Fatias de Bacon + Barbecue',
+                rhyme: 'O BANANA BACON mistura o doce e o salgado! 🍌🥓\nBanana frita e bacon bem crocante do lado!\nCom queijo derretido e molho barbecue,\nÉ a combinação suprema do nosso menu! 🌟',
+                layers: [
+                    { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+                    { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Bacon', icon: '🥓', color: '#B23A48' },
+                    { name: 'Banana da terra frita', icon: '🍌', color: '#FFB703' },
+                    { name: 'Molho barbecue', icon: '🥫', color: '#8B0000' }
+                ]
+            },
+            {
+                id: 'misto-quente',
+                name: 'MISTO QUENTE',
+                category: 'Novidades',
+                hack: 'Macete: Pão de Forma + Queijo + Presunto',
+                rhyme: 'O MISTO QUENTE é simples e certeiro! 🍞\nPão de forma selado no ponto primeiro!\nQueijo e presunto quentinhos a derreter,\nPerfeito pra qualquer hora do dia comer! 🥪',
+                layers: [
+                    { name: 'Pão de forma', icon: '🍞', color: '#F4D03F' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Presunto', icon: '🍖', color: '#F28482' }
+                ]
+            },
+            {
+                id: 'queijo-quente',
+                name: 'QUEIJO QUENTE',
+                category: 'Novidades',
+                hack: 'Macete: Pão de Forma + Só Queijo derretido',
+                rhyme: 'O QUEIJO QUENTE é puro amor em fatia! 🧀\nPão de forma tostado com muita alegria!\nMuito queijo derretido pra te conquistar,\nO clássico da chapa que faz suspirar! ✨',
+                layers: [
+                    { name: 'Pão de forma', icon: '🍞', color: '#F4D03F' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' }
+                ]
+            },
+            {
+                id: 'misto-quente-duplo',
+                name: 'MISTO QUENTE DUPLO',
+                category: 'Novidades',
+                hack: 'Macete: Pão de Forma + 2 Queijos + 2 Presuntos',
+                rhyme: 'O MISTO DUPLO vem pra caprichar! 🥪\nDuas fatias de queijo e presunto sem parar!\nNo pão de forma tostado e bem douradinho,\nO duplo sabor que te deixa felizinho! 😋',
+                layers: [
+                    { name: 'Pão de forma', icon: '🍞', color: '#F4D03F' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+                    { name: 'Presunto', icon: '🍖', color: '#F28482' },
+                    { name: 'Presunto', icon: '🍖', color: '#F28482' }
+                ]
+            }
+        ];
+
+        // Dicionário Global de Ingredientes Únicos para Escolhas
+        const ALL_INGREDIENTS = [
+            { name: 'Pão de leite', icon: '🍞', color: '#E0A96D' },
+            { name: 'Pão de forma', icon: '🍞', color: '#F4D03F' },
+            { name: 'Blend 100g', icon: '🥩', color: '#5C3D2E' },
+            { name: 'Fatia de queijo', icon: '🧀', color: '#FFC107' },
+            { name: 'Fatia de queijo duplo', icon: '🧀', color: '#FFB703' },
+            { name: 'Queijo', icon: '🧀', color: '#FFC107' },
+            { name: 'Bacon', icon: '🥓', color: '#B23A48' },
+            { name: 'Calabresa', icon: '🍕', color: '#D62828' },
+            { name: 'Presunto', icon: '🍖', color: '#F28482' },
+            { name: 'Ovo', icon: '🍳', color: '#FFD166' },
+            { name: 'Alface', icon: '🥬', color: '#2A9D8F' },
+            { name: 'Tomate', icon: '🍅', color: '#E63946' },
+            { name: 'Salada', icon: '🥗', color: '#2A9D8F' },
+            { name: 'Cebola caramelizada', icon: '🧅', color: '#9B51E0' },
+            { name: 'Cebola roxa', icon: '🧅', color: '#7209B7' },
+            { name: 'Cebola frita', icon: '🧅', color: '#D4A373' },
+            { name: 'Banana da terra frita', icon: '🍌', color: '#FFB703' },
+            { name: 'Batata palha', icon: '🍟', color: '#E9C46A' },
+            { name: 'Molho americano', icon: '🥣', color: '#F4A261' },
+            { name: 'Molho barbecue', icon: '🥫', color: '#8B0000' },
+            { name: 'Maionese de alho', icon: '🧄', color: '#FFF3BF' },
+            { name: 'Molho de bacon', icon: '🥫', color: '#C05A46' },
+            { name: 'Farofa de bacon', icon: '🥓', color: '#8D0801' }
+        ];
+
+        // ESTADOS DOS JOGOS
+        let activeStackBurger = ZETA_MENU[0];
+        let currentStackBuild = [];
+
+        let memoryCards = [];
+        let flippedCards = [];
+        let memoryMatches = 0;
+
+        // TROCA DE ABAS NATIVAS
+        function switchTab(tabId) {
+            playSound('pop');
+            document.querySelectorAll('section[id^="section-"]').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('bg-zeta-gold', 'text-black');
+                b.classList.add('text-gray-400');
+            });
+
+            document.getElementById(`section-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.add('bg-zeta-gold', 'text-black');
+            activeBtn.classList.remove('text-gray-400');
+
+            if (tabId === 'memory' && memoryCards.length === 0) {
+                startMemoryGame();
+            }
+        }
+
+        // RENDERING ABA 1: RIMAS E MACETES
+        function renderRhymesCards(categoryFilter = 'all') {
+            const grid = document.getElementById('rhymes-grid');
+            grid.innerHTML = '';
+
+            document.querySelectorAll('.rhyme-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-zeta-gold', 'text-black');
+                btn.classList.add('bg-zeta-bg', 'text-gray-400');
+            });
+            const activeFilterBtn = document.getElementById(`rhyme-filter-${categoryFilter}`);
+            if (activeFilterBtn) {
+                activeFilterBtn.classList.add('bg-zeta-gold', 'text-black');
+                activeFilterBtn.classList.remove('bg-zeta-bg', 'text-gray-400');
+            }
+
+            const filtered = categoryFilter === 'all' 
+                ? ZETA_MENU 
+                : ZETA_MENU.filter(b => b.category === categoryFilter);
+
+            filtered.forEach(b => {
+                const card = document.createElement('div');
+                card.className = "bg-zeta-bg border border-zeta-border hover:border-zeta-gold/60 p-5 rounded-3xl shadow-xl flex flex-col justify-between transition-all hover:scale-[1.01]";
+
+                const emojiSequence = b.layers.map(l => l.icon).join(' ');
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-orbitron font-black text-lg text-white">${b.name}</h3>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zeta-purple/20 text-zeta-teal border border-zeta-purple/40">${b.category}</span>
+                        </div>
+
+                        <!-- Macete Rápido -->
+                        <div class="bg-zeta-gold/10 border border-zeta-gold/30 p-2.5 rounded-2xl mb-3 text-xs font-bold text-zeta-gold">
+                            💡 ${b.hack}
+                        </div>
+
+                        <!-- Versos / Rima -->
+                        <div class="bg-zeta-card p-3.5 rounded-2xl border border-zeta-border text-xs text-gray-200 whitespace-pre-line leading-relaxed font-medium mb-4 italic">
+                            "${b.rhyme}"
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="text-[11px] font-mono text-gray-400 mb-2 flex items-center justify-between">
+                            <span>Sequência de Emojis:</span>
+                            <span class="text-base">${emojiSequence}</span>
+                        </div>
+                        <button onclick="selectAndStack('${b.id}')" class="w-full bg-zeta-gold hover:bg-amber-400 text-black font-orbitron font-black py-2.5 rounded-xl text-xs transition-all shadow flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play"></i> Praticar Montagem
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterRhymes(category) {
+            playSound('pop');
+            renderRhymesCards(category);
+        }
+
+        function selectAndStack(burgerId) {
+            changeStackBurger(burgerId);
+            switchTab('stack');
+        }
+
+        // RENDERING ABA 2: MONTAR GRAFICAMENTE
+        function populateStackBurgerSelect() {
+            const select = document.getElementById('stack-burger-select');
+            select.innerHTML = '';
+            ZETA_MENU.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b.id;
+                opt.innerText = b.name;
+                select.appendChild(opt);
+            });
+        }
+
+        function changeStackBurger(burgerId) {
+            const found = ZETA_MENU.find(b => b.id === burgerId);
+            if (found) {
+                activeStackBurger = found;
+                document.getElementById('stack-burger-title').innerText = activeStackBurger.name;
+                document.getElementById('stack-burger-line').innerText = `Cardápio ${activeStackBurger.category}`;
+                document.getElementById('stack-burger-hack').innerText = activeStackBurger.hack;
+                document.getElementById('stack-total-count').innerText = activeStackBurger.layers.length;
+                document.getElementById('stack-burger-select').value = burgerId;
+                resetStackGame();
+            }
+        }
+
+        function renderIngredientPicker() {
+            const picker = document.getElementById('stack-ingredient-picker');
+            picker.innerHTML = '';
+
+            // Opções únicas de ingredientes
+            const pool = [];
+            const addedNames = new Set();
+
+            // Adiciona ingredientes do lanche atual
+            activeStackBurger.layers.forEach(l => {
+                if (!addedNames.has(l.name)) {
+                    pool.push(l);
+                    addedNames.add(l.name);
+                }
+            });
+
+            // Adiciona distratores extras
+            ALL_INGREDIENTS.forEach(ing => {
+                if (!addedNames.has(ing.name) && pool.length < 12) {
+                    pool.push(ing);
+                    addedNames.add(ing.name);
+                }
+            });
+
+            pool.sort(() => Math.random() - 0.5);
+
+            pool.forEach(ing => {
+                const btn = document.createElement('button');
+                btn.className = "bg-zeta-bg border border-zeta-border hover:border-zeta-gold p-3 rounded-2xl flex items-center gap-2.5 transition-all text-left shadow active:scale-95";
+                btn.onclick = () => addStackLayer(ing);
+                btn.innerHTML = `
+                    <span class="text-xl">${ing.icon}</span>
+                    <span class="font-bold text-xs text-white truncate">${ing.name}</span>
+                `;
+                picker.appendChild(btn);
+            });
+        }
+
+        function addStackLayer(ing) {
+            const expectedIdx = currentStackBuild.length;
+            const expectedLayer = activeStackBurger.layers[expectedIdx];
+
+            if (!expectedLayer) return;
+
+            if (ing.name === expectedLayer.name) {
+                playSound('pop');
+                currentStackBuild.push(ing);
+                updateStackUI();
+
+                const feedback = document.getElementById('stack-feedback-text');
+                feedback.className = "text-xs font-bold text-emerald-400 animate-pulse";
+                feedback.innerText = "Camada Correta! 🎯";
+
+                if (currentStackBuild.length === activeStackBurger.layers.length) {
+                    playSound('win');
+                    feedback.className = "text-xs font-orbitron font-extrabold text-zeta-gold bounce-in";
+                    feedback.innerText = `🎉 PERFEITO! ${activeStackBurger.name} montado com sucesso!`;
+                }
+            } else {
+                playSound('error');
+                const stackArea = document.getElementById('burger-visual-stack');
+                stackArea.classList.add('shake');
+                setTimeout(() => stackArea.classList.remove('shake'), 400);
+
+                const feedback = document.getElementById('stack-feedback-text');
+                feedback.className = "text-xs font-bold text-zeta-red";
+                feedback.innerText = `Erro! Próxima camada era: "${expectedLayer.name}".`;
+            }
+        }
+
+        function undoLastStackLayer() {
+            if (currentStackBuild.length > 0) {
+                playSound('pop');
+                currentStackBuild.pop();
+                updateStackUI();
+                document.getElementById('stack-feedback-text').innerText = '';
+            }
+        }
+
+        function resetStackGame() {
+            currentStackBuild = [];
+            document.getElementById('stack-feedback-text').innerText = '';
+            updateStackUI();
+            renderIngredientPicker();
+        }
+
+        function updateStackUI() {
+            const container = document.getElementById('burger-visual-stack');
+            container.innerHTML = '';
+
+            document.getElementById('stack-progress-count').innerText = currentStackBuild.length;
+            const nextIdx = currentStackBuild.length;
+
+            if (nextIdx < activeStackBurger.layers.length) {
+                document.getElementById('stack-next-layer-num').innerText = `Camada #${nextIdx + 1}: ${activeStackBurger.layers[nextIdx].name}`;
+            } else {
+                document.getElementById('stack-next-layer-num').innerText = "Hambúrguer Concluído! 🏆";
+            }
+
+            if (currentStackBuild.length === 0) {
+                container.innerHTML = `
+                    <div class="text-gray-500 font-bold text-center my-auto flex flex-col items-center gap-2 text-xs">
+                        <i class="fa-solid fa-arrow-down text-lg animate-bounce text-zeta-gold"></i>
+                        <span>Clique no "Pão de leite" para começar a montar a base!</span>
+                    </div>
+                `;
+                return;
+            }
+
+            currentStackBuild.forEach((ing, i) => {
+                const layerEl = document.createElement('div');
+                layerEl.className = "w-full sm:w-4/5 p-2 rounded-xl text-white font-bold text-xs flex items-center justify-between px-4 bounce-in shadow border border-white/10";
+                layerEl.style.backgroundColor = ing.color;
+                layerEl.innerHTML = `
+                    <span>${ing.icon} ${ing.name}</span>
+                    <span class="text-[10px] opacity-80">#${i + 1}</span>
+                `;
+                container.appendChild(layerEl);
+            });
+        }
+
+        // RENDERING ABA 3: JOGO DA MEMÓRIA DOS ÍCONES
+        function startMemoryGame() {
+            playSound('pop');
+            const grid = document.getElementById('memory-card-grid');
+            grid.innerHTML = '';
+            flippedCards = [];
+            memoryMatches = 0;
+            document.getElementById('memory-matches').innerText = `0 / 6`;
+
+            // Seleciona 6 lanches aleatórios para a partida
+            const selectedBurgers = [...ZETA_MENU].sort(() => Math.random() - 0.5).slice(0, 6);
+
+            const cardsData = [];
+            selectedBurgers.forEach(b => {
+                // Carta 1: Nome + Macete
+                cardsData.push({
+                    id: b.id,
+                    type: 'name',
+                    content: `<div class="font-orbitron font-black text-zeta-gold text-base mb-1">${b.name}</div><div class="text-[10px] text-gray-300 font-bold">${b.hack}</div>`
+                });
+
+                // Carta 2: Sequência de Emojis
+                const emojiSeq = b.layers.map(l => l.icon).join(' ');
+                cardsData.push({
+                    id: b.id,
+                    type: 'emojis',
+                    content: `<div class="text-2xl mb-1">${emojiSeq}</div><div class="text-[10px] text-zeta-teal font-mono">Receita Oficial</div>`
+                });
+            });
+
+            cardsData.sort(() => Math.random() - 0.5);
+
+            memoryCards = cardsData;
+
+            cardsData.forEach((card, idx) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = "h-28 perspective-1000 cursor-pointer";
+                cardEl.onclick = () => flipMemoryCard(idx, cardEl);
+
+                cardEl.innerHTML = `
+                    <div id="card-inner-${idx}" class="w-full h-full transform-style-3d transition-transform duration-500 relative rounded-2xl shadow-lg border border-zeta-border">
+                        <!-- Frente (Escondida) -->
+                        <div class="absolute inset-0 bg-zeta-bg border-2 border-zeta-border rounded-2xl flex items-center justify-center backface-hidden text-zeta-gold text-2xl font-orbitron font-black">
+                            Z
+                        </div>
+                        <!-- Verso (Revelada) -->
+                        <div class="absolute inset-0 bg-zeta-card border-2 border-zeta-gold rounded-2xl p-3 flex flex-col items-center justify-center text-center backface-hidden rotate-y-180">
+                            ${card.content}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(cardEl);
+            });
+        }
+
+        function flipMemoryCard(idx, cardEl) {
+            if (flippedCards.length >= 2) return;
+            const cardInner = document.getElementById(`card-inner-${idx}`);
+            if (cardInner.classList.contains('rotate-y-180')) return; // Já virada
+
+            playSound('flip');
+            cardInner.classList.add('rotate-y-180');
+            flippedCards.push({ idx, id: memoryCards[idx].id, el: cardInner });
+
+            if (flippedCards.length === 2) {
+                if (flippedCards[0].id === flippedCards[1].id) {
+                    // Par encontrado!
+                    playSound('win');
+                    memoryMatches++;
+                    document.getElementById('memory-matches').innerText = `${memoryMatches} / 6`;
+                    flippedCards[0].el.classList.add('glow-gold');
+                    flippedCards[1].el.classList.add('glow-gold');
+                    flippedCards = [];
+
+                    if (memoryMatches === 6) {
+                        setTimeout(() => playSound('win'), 300);
+                    }
+                } else {
+                    // Não é par, desvira
+                    setTimeout(() => {
+                        playSound('error');
+                        flippedCards[0].el.classList.remove('rotate-y-180');
+                        flippedCards[1].el.classList.remove('rotate-y-180');
+                        flippedCards = [];
+                    }, 1000);
+                }
+            }
+        }
+
+        // RENDERING ABA 4: FICHAS MNEMÔNICAS & FILTROS
+        function renderStudyCards(filterText = '') {
+            const grid = document.getElementById('study-cards-grid');
+            grid.innerHTML = '';
+
+            const filtered = ZETA_MENU.filter(b => {
+                const search = filterText.toLowerCase();
+                const matchName = b.name.toLowerCase().includes(search);
+                const matchIng = b.layers.some(l => l.name.toLowerCase().includes(search));
+                return matchName || matchIng;
+            });
+
+            filtered.forEach(b => {
+                const card = document.createElement('div');
+                card.className = "bg-zeta-bg border border-zeta-border p-5 rounded-3xl shadow-xl flex flex-col justify-between";
+
+                const layersHTML = b.layers.map((l, i) => `
+                    <div class="flex items-center justify-between py-1 text-xs text-gray-300 border-b border-zeta-border/40 last:border-0">
+                        <span class="flex items-center gap-2"><span class="text-sm">${l.icon}</span> ${l.name}</span>
+                        <span class="text-[10px] text-gray-500 font-mono">Camada #${i + 1}</span>
+                    </div>
+                `).join('');
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-orbitron font-black text-lg text-white">${b.name}</h3>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded bg-zeta-gold/10 text-zeta-gold border border-zeta-gold/20">${b.category}</span>
+                        </div>
+                        <div class="text-xs font-bold text-zeta-teal mb-3">💡 ${b.hack}</div>
+
+                        <div class="bg-zeta-card p-3 rounded-2xl border border-zeta-border mb-4">
+                            ${layersHTML}
+                        </div>
+                    </div>
+
+                    <button onclick="selectAndStack('${b.id}')" class="w-full bg-zeta-card hover:bg-zeta-gold hover:text-black border border-zeta-gold/30 text-zeta-gold font-bold py-2 rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-gamepad"></i> Praticar este no Jogo
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterStudyCards() {
+            const val = document.getElementById('cards-search-input').value;
+            renderStudyCards(val);
+        }
+
+        // INITIALIZATION
+        window.onload = function() {
+            renderRhymesCards('all');
+            populateStackBurgerSelect();
+            changeStackBurger(ZETA_MENU[0].id);
+            renderStudyCards();
+        };
+    </script>
+</body>
+</html>
+```
